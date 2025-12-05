@@ -75,10 +75,10 @@ GENERAL RULES:
   7. Return as a JSON array string.
 - When facing a GitHub API task:
   1. Download the JSON file with parameters (owner, repo, sha, pathPrefix, extension).
-  2. Call GitHub API at: api.github.com/repos/OWNER/REPO/git/trees/SHA with recursive=1 parameter.
-  3. Count files matching the extension under the pathPrefix.
-  4. Calculate offset = (length of email) mod 2.
-  5. Submit final_answer = count + offset as an INTEGER (not float).
+  2. Fetch GitHub tree: GET api.github.com/repos/OWNER/REPO/git/trees/SHA?recursive=1
+  3. Count files where path starts with pathPrefix AND ends with extension.
+  4. Calculate offset = (length of your email) mod 2.
+  5. Final answer = count + offset. Submit as INTEGER only (not float, not 0.0).
 
 TIME LIMIT RULES:
 - Each task has a hard 3-minute limit.
@@ -167,7 +167,7 @@ app = graph.compile()
 def run_agent(url: str) -> str:
     app.invoke({
         "messages": [{"role": "user", "content": url}]},
-        config={"recursion_limit": 200},
+        config={"recursion_limit": 300},
     )
     print("Tasks completed succesfully")
 
