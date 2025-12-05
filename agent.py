@@ -73,6 +73,12 @@ GENERAL RULES:
   5. Convert numeric values to integers (strip whitespace).
   6. Sort by the specified field (usually 'id' ascending).
   7. Return as a JSON array string.
+- When facing a GitHub API task:
+  1. Download the JSON file with parameters (owner, repo, sha, pathPrefix, extension).
+  2. Use the GitHub API: https://api.github.com/repos/{owner}/{repo}/git/trees/{sha}?recursive=1
+  3. Count files matching the extension under the pathPrefix.
+  4. Calculate offset = (length of email) mod 2.
+  5. Submit final_answer = count + offset as an INTEGER (not float).
 
 TIME LIMIT RULES:
 - Each task has a hard 3-minute limit.
