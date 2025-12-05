@@ -65,6 +65,14 @@ GENERAL RULES:
   1. Download the audio file.
   2. Use the 'transcribe_audio' tool to get the text.
   3. Extract the answer from the transcription.
+- When facing a CSV normalization task:
+  1. Download the CSV file.
+  2. Parse it carefully, handling inconsistent date formats (e.g., "02/01/24", "2024-01-30", "1 Feb 2024").
+  3. Convert ALL dates to ISO-8601 format (YYYY-MM-DD).
+  4. Ensure keys are in snake_case.
+  5. Convert numeric values to integers (strip whitespace).
+  6. Sort by the specified field (usually 'id' ascending).
+  7. Return as a JSON array string.
 
 TIME LIMIT RULES:
 - Each task has a hard 3-minute limit.
