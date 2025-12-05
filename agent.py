@@ -82,10 +82,12 @@ GENERAL RULES:
   5. Final answer = count + offset. Submit as INTEGER only (not float, not 0.0).
 
 TIME LIMIT RULES:
-- Each task has a hard 3-minute limit.
+- Each task has a HARD 3-minute (180 second) limit from when you first fetch the challenge page.
+- Track time carefully. If you've spent more than 2.5 minutes on a challenge, submit your best answer immediately.
 - The server response includes a "delay" field indicating elapsed time.
 - If your answer is wrong but the response contains a new URL, CONTINUE to that URL immediately.
-- Only retry the same challenge if the response has NO new URL.
+- Only retry the same challenge if: (1) response has NO new URL AND (2) you're under 2.5 minutes.
+- NEVER spend more than 3 attempts or 2.5 minutes on any single challenge.
 
 STOPPING CONDITION:
 - Only return "END" when a server response explicitly contains NO new URL.
