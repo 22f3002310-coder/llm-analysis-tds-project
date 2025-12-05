@@ -84,7 +84,8 @@ GENERAL RULES:
 TIME LIMIT RULES:
 - Each task has a hard 3-minute limit.
 - The server response includes a "delay" field indicating elapsed time.
-- If your answer is wrong retry again.
+- If your answer is wrong but the response contains a new URL, CONTINUE to that URL immediately.
+- Only retry the same challenge if the response has NO new URL.
 
 STOPPING CONDITION:
 - Only return "END" when a server response explicitly contains NO new URL.
