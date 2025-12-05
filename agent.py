@@ -2,7 +2,7 @@ from langgraph.graph import StateGraph, END, START
 from langchain_core.rate_limiters import InMemoryRateLimiter
 from langgraph.prebuilt import ToolNode
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from tools import get_rendered_html, download_file, post_request, run_code, add_dependencies
+from tools import get_rendered_html, download_file, post_request, run_code, add_dependencies, transcribe_audio
 from typing import TypedDict, Annotated, List, Any
 from langchain.chat_models import init_chat_model
 from langgraph.graph.message import add_messages
@@ -19,14 +19,14 @@ class AgentState(TypedDict):
     messages: Annotated[List, add_messages]
 
 
-TOOLS = [run_code, get_rendered_html, download_file, post_request, add_dependencies]
+TOOLS = [run_code, get_rendered_html, download_file, post_request, add_dependencies, transcribe_audio]
 
 
 # -------------------------------------------------
 # GEMINI LLM
 # -------------------------------------------------
 rate_limiter = InMemoryRateLimiter(
-    requests_per_second=9/60,  
+    requests_per_second=4/60,  
     check_every_n_seconds=1,  
     max_bucket_size=9  
 )
@@ -61,6 +61,10 @@ GENERAL RULES:
 - NEVER re-submit unless the server explicitly allows or it's within the 3-minute limit.
 - ALWAYS inspect the server response before deciding what to do next.
 - ALWAYS use the tools provided to fetch, scrape, download, render HTML, or send requests.
+- When facing an audio task:
+  1. Download the audio file.
+  2. Use the 'transcribe_audio' tool to get the text.
+  3. Extract the answer from the transcription.
 
 TIME LIMIT RULES:
 - Each task has a hard 3-minute limit.

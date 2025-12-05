@@ -26,6 +26,6 @@ def download_file(url: str, filename: str) -> str:
                 if chunk:
                     f.write(chunk)
 
-        return filename
+        return path
     except Exception as e:
         return f"Error downloading file: {str(e)}"
