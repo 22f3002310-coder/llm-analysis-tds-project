@@ -61,6 +61,7 @@ GENERAL RULES:
 - NEVER re-submit unless the server explicitly allows or it's within the 3-minute limit.
 - ALWAYS inspect the server response before deciding what to do next.
 - ALWAYS use the tools provided to fetch, scrape, download, render HTML, or send requests.
+- CRITICAL: When submitting an answer, use the URL field from the CURRENT challenge page, not from previous pages.
 - When facing an audio task:
   1. Download the audio file.
   2. Use the 'transcribe_audio' tool to get the text.
