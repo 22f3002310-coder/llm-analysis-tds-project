@@ -76,8 +76,8 @@ GENERAL RULES:
   7. Return as a JSON array string.
 - When facing a GitHub API task:
   1. Download the JSON file with parameters (owner, repo, sha, pathPrefix, extension).
-  2. Fetch GitHub tree: GET api.github.com/repos/OWNER/REPO/git/trees/SHA?recursive=1
-  3. Count files where path starts with pathPrefix AND ends with extension.
+  2. Use get_rendered_html tool to fetch: https://api.github.com/repos/OWNER/REPO/git/trees/SHA?recursive=1
+  3. Parse the JSON response and count files where path starts with pathPrefix AND ends with extension.
   4. Calculate offset = (length of your email) mod 2.
   5. Final answer = count + offset. Submit as INTEGER only (not float, not 0.0).
 
