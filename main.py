@@ -22,6 +22,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 START_TIME = time.time()
+
+@app.get("/")
+def root():
+    """Root endpoint for basic health check."""
+    return {"status": "ok", "service": "llm-agent"}
+
 @app.get("/healthz")
 @app.head("/healthz")
 def healthz():
