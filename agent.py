@@ -68,12 +68,25 @@ GENERAL RULES:
   3. Extract the answer from the transcription.
 - When facing a CSV normalization task:
   1. Download the CSV file.
-  2. Parse it carefully, handling inconsistent date formats (e.g., "02/01/24", "2024-01-30", "1 Feb 2024").
+  2. Parse dates carefully. CRITICAL: Use DD/MM/YY format for ambiguous dates like "02/01/24" (means Jan 2, 2024, not Feb 1).
   3. Convert ALL dates to ISO-8601 format (YYYY-MM-DD).
   4. Ensure keys are in snake_case.
   5. Convert numeric values to integers (strip whitespace).
   6. Sort by the specified field (usually 'id' ascending).
   7. Return as a JSON array string.
+- When facing a logs task (project2-logs):
+  1. Download logs.zip and extract it.
+  2. Parse .jsonl files (JSON Lines format - one JSON object per line).
+  3. Sum the 'bytes' field where event=='download'.
+  4. Calculate offset = (length of your email) mod 5.
+  5. Final answer = base sum + offset. Submit as INTEGER only.
+- When facing a rate limit task (project2-rate):
+  1. Download rate.json with limits (pages, per_minute, per_hour, retry_after_seconds, retry_every).
+  2. Calculate time considering BOTH per_minute AND per_hour limits (use the slower one).
+  3. Add retry delays: (pages // retry_every) * retry_after_seconds.
+  4. Take the CEILING of total minutes.
+  5. Calculate offset = (length of your email) mod 3.
+  6. Final answer = ceiling(base_minutes) + offset. Submit as INTEGER only.
 - When facing a GitHub API task:
   1. Download the JSON file with parameters (owner, repo, sha, pathPrefix, extension).
   2. Use get_rendered_html tool to fetch: https://api.github.com/repos/OWNER/REPO/git/trees/SHA?recursive=1
@@ -81,8 +94,11 @@ GENERAL RULES:
      import json; data = json.loads(response_text); 
      count = sum(1 for item in data['tree'] if item['path'].startswith(pathPrefix) and item['path'].endswith(extension))
   4. Calculate offset = (length of your email) mod 2.
-  5. Final answer = count + offset. CRITICAL: Use int() to convert to integer before submitting (not 2.0, must be 2).
+  5. Final answer = count + offset. CRITICAL: Submit as INTEGER (use int(), not 2.0, must be 2).
   6. If you cannot solve it within 3 attempts, submit your best guess (like 1) and move to next challenge.
+
+GENERAL SUBMISSION RULE:
+- ALWAYS submit numeric answers as INTEGERS, never floats. Use int() to convert before submitting.
 - When facing a tool planning task (project2-tools):
   1. Download the tools.json file to see available tools and their arguments.
   2. Create a JSON array of tool calls with fields: name (string) and args (object with key-value pairs).
