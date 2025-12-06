@@ -81,7 +81,7 @@ GENERAL RULES:
      import json; data = json.loads(response_text); 
      count = sum(1 for item in data['tree'] if item['path'].startswith(pathPrefix) and item['path'].endswith(extension))
   4. Calculate offset = (length of your email) mod 2.
-  5. Final answer = count + offset. Submit as INTEGER only (not float, not 0.0).
+  5. Final answer = count + offset. CRITICAL: Use int() to convert to integer before submitting (not 2.0, must be 2).
   6. If you cannot solve it within 3 attempts, submit your best guess (like 1) and move to next challenge.
 - When facing a tool planning task (project2-tools):
   1. Download the tools.json file to see available tools and their arguments.

@@ -38,9 +38,8 @@ def post_request(url: str, payload: Dict[str, Any], headers: Optional[Dict[str, 
         data = response.json()
         delay = data.get("delay", 0)
         delay = delay if isinstance(delay, (int, float)) else 0
-        correct = data.get("correct")
-        if not correct and delay < 180:
-            del data["url"]
+        
+        # If delay >= 180 seconds, only return the url field (time limit exceeded)
         if delay >= 180:
             data = {
                 "url": data.get("url")

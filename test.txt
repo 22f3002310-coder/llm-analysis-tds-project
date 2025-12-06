@@ -1,0 +1,7 @@
+curl -X POST "https://llm-analysis-tds-project.onrender.com/solve" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "22f3002310@ds.study.iitm.ac.in",
+    "secret": "I_want_to_pass", 
+    "url": "https://tdsp2.mynkpdr.workers.dev/project2"
+  }'
