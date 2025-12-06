@@ -85,10 +85,10 @@ GENERAL RULES:
   6. If you cannot solve it within 3 attempts, submit your best guess (like 1) and move to next challenge.
 - When facing a tool planning task (project2-tools):
   1. Download the tools.json file to see available tools and their arguments.
-  2. Create a JSON array of tool calls in the required order.
-  3. Each tool call must have: {{"name": "tool_name", "args": {{"arg1": "value1", "arg2": value2}}}}
-  4. For summarize tool, the "text" argument should reference the OUTPUT of fetch_issue (not a literal string).
-  5. Use format: [{{"name": "search_docs", "args": {{"query": "..."}}}}, {{"name": "fetch_issue", "args": {{"owner": "demo", "repo": "api", "id": 42}}}}, {{"name": "summarize", "args": {{"text": "<fetch_issue output>", "max_tokens": 60}}}}]
+  2. Create a JSON array of tool calls with fields: name (string) and args (object with key-value pairs).
+  3. Required order: search_docs, then fetch_issue, then summarize.
+  4. For summarize tool, the text argument should reference the output from fetch_issue.
+  5. Use max_tokens of 60 or less. Make sure id is an integer (42, not "42").
 
 TIME LIMIT RULES:
 - Each task has a HARD 3-minute (180 second) limit from when you first fetch the challenge page.
