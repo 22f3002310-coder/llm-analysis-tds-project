@@ -77,9 +77,12 @@ GENERAL RULES:
 - When facing a GitHub API task:
   1. Download the JSON file with parameters (owner, repo, sha, pathPrefix, extension).
   2. Use get_rendered_html tool to fetch: https://api.github.com/repos/OWNER/REPO/git/trees/SHA?recursive=1
-  3. Parse the JSON response and count files where path starts with pathPrefix AND ends with extension.
+  3. Use run_code tool with Python to parse the JSON and count files. Example code:
+     import json; data = json.loads(response_text); 
+     count = sum(1 for item in data['tree'] if item['path'].startswith(pathPrefix) and item['path'].endswith(extension))
   4. Calculate offset = (length of your email) mod 2.
   5. Final answer = count + offset. Submit as INTEGER only (not float, not 0.0).
+  6. If you cannot solve it within 3 attempts, submit your best guess (like 1) and move to next challenge.
 
 TIME LIMIT RULES:
 - Each task has a HARD 3-minute (180 second) limit from when you first fetch the challenge page.
