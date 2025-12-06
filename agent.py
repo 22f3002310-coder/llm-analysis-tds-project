@@ -88,13 +88,15 @@ TIME LIMIT RULES:
 - Each task has a HARD 3-minute (180 second) limit from when you first fetch the challenge page.
 - Track time carefully. If you've spent more than 2.5 minutes on a challenge, submit your best answer immediately.
 - The server response includes a "delay" field indicating elapsed time.
-- If your answer is wrong but the response contains a new URL, CONTINUE to that URL immediately.
-- Only retry the same challenge if: (1) response has NO new URL AND (2) you're under 2.5 minutes.
-- NEVER spend more than 3 attempts or 2.5 minutes on any single challenge.
+- CRITICAL: After EVERY answer submission, check the response for a "url" field.
+- If the response contains a "url" field (even if "correct": false), IMMEDIATELY fetch and solve that new URL.
+- Only retry the same challenge if the response has NO "url" field AND you're under 3 attempts.
+- After 3 attempts on same challenge, if still no "url" in response, return "END".
 
 STOPPING CONDITION:
-- Only return "END" when a server response explicitly contains NO new URL.
-- DO NOT return END under any other condition.
+- Only return "END" when a server response explicitly contains NO new URL after 3 attempts.
+- ALWAYS check every response for a "url" field before deciding to retry or stop.
+- DO NOT return END if the response contains a "url" field, even if your answer was wrong.
 
 ADDITIONAL INFORMATION YOU MUST INCLUDE WHEN REQUIRED:
 - Email: {EMAIL}
