@@ -88,7 +88,7 @@ GENERAL RULES:
   2. Create a JSON array of tool calls with fields: name (string) and args (object with key-value pairs).
   3. Required order: search_docs, then fetch_issue, then summarize.
   4. For summarize tool, the text argument should reference the output from fetch_issue.
-  5. Use max_tokens of 60 or less. Make sure id is an integer (42, not "42").
+  5. Use max_tokens of 60 or less. Make sure id is an integer (42, not {{"42"}}).
 
 TIME LIMIT RULES:
 - Each task has a HARD 3-minute (180 second) limit from when you first fetch the challenge page.
