@@ -32,7 +32,7 @@ rate_limiter = InMemoryRateLimiter(
 )
 llm = init_chat_model(
    model_provider="google_genai",
-   model="gemini-pro",  # Using stable gemini-pro model
+   model="models/gemini-pro",  # Using full model path for API compatibility
    rate_limiter=rate_limiter
 ).bind_tools(TOOLS)   
 
