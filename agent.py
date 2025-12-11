@@ -32,7 +32,7 @@ rate_limiter = InMemoryRateLimiter(
 )
 llm = init_chat_model(
    model_provider="google_genai",
-   model="gemini-1.5-pro",  # Using 1.5-pro which has higher quota than 2.5-flash
+   model="gemini-pro",  # Using stable gemini-pro model
    rate_limiter=rate_limiter
 ).bind_tools(TOOLS)   
 
