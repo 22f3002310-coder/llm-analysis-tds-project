@@ -4,7 +4,7 @@ from langgraph.prebuilt import ToolNode
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from tools import get_rendered_html, download_file, post_request, run_code, add_dependencies, transcribe_audio
 from typing import TypedDict, Annotated, List, Any
-from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_openai import ChatOpenAI
 from langgraph.graph.message import add_messages
 import os
 from dotenv import load_dotenv
@@ -25,14 +25,10 @@ TOOLS = [run_code, get_rendered_html, download_file, post_request, add_dependenc
 # -------------------------------------------------
 # GEMINI LLM
 # -------------------------------------------------
-rate_limiter = InMemoryRateLimiter(
-    requests_per_second=4/60,  
-    check_every_n_seconds=1,  
-    max_bucket_size=9  
-)
-llm = ChatGoogleGenerativeAI(
-    model="gemini-1.5-flash-latest",
-    rate_limiter=rate_limiter
+# Using OpenAI GPT-4o-mini - reliable, fast, and works perfectly with langchain
+llm = ChatOpenAI(
+    model="gpt-4o-mini",
+    temperature=0
 ).bind_tools(TOOLS)   
 
 
