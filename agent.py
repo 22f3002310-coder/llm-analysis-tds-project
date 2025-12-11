@@ -4,7 +4,7 @@ from langgraph.prebuilt import ToolNode
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from tools import get_rendered_html, download_file, post_request, run_code, add_dependencies, transcribe_audio
 from typing import TypedDict, Annotated, List, Any
-from langchain.chat_models import init_chat_model
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langgraph.graph.message import add_messages
 import os
 from dotenv import load_dotenv
@@ -30,10 +30,9 @@ rate_limiter = InMemoryRateLimiter(
     check_every_n_seconds=1,  
     max_bucket_size=9  
 )
-llm = init_chat_model(
-   model_provider="google_genai",
-   model="models/gemini-pro",  # Using full model path for API compatibility
-   rate_limiter=rate_limiter
+llm = ChatGoogleGenerativeAI(
+    model="gemini-1.5-flash-latest",
+    rate_limiter=rate_limiter
 ).bind_tools(TOOLS)   
 
 
