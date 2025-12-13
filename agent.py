@@ -149,7 +149,24 @@ def agent_node(state: AgentState):
             # Emergency: Run the direct solver to complete the challenges
             import direct_solver
             print("🚀 Running Direct Solver...")
-            direct_solver.main()
+            
+            # Extract the URL from the initial user input in 'messages' if possible
+            # But simpler to just defaults or allow it to be dynamic. 
+            # In the state, we don't easily have the original input unless we scan history.
+            # We'll try to find a URL in the last user message, else default.
+            
+            target_url = "https://tds-llm-analysis.s-anand.net/project2" # Default
+            for m in reversed(state["messages"]):
+                if hasattr(m, "content") and "url" in m.content:
+                     # Attempt to extract json or look for http
+                     import re
+                     urls = re.findall(r'https?://[^\s"\']+', str(m.content))
+                     if urls:
+                         target_url = urls[0]
+                         break
+            
+            print(f"Targeting URL: {target_url}")
+            direct_solver.main(target_url)
             return {"messages": state["messages"] + [AIMessage(content="Emergency failsafe completed all tasks.")]}
         except Exception as inner_e:
             print(f"💀 Failsafe failed: {inner_e}")
