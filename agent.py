@@ -23,12 +23,14 @@ TOOLS = [run_code, get_rendered_html, download_file, post_request, add_dependenc
 
 
 # -------------------------------------------------
-# GEMINI LLM
+# LLM - Using AI Pipe (OpenAI-compatible)
 # -------------------------------------------------
-# Using OpenAI GPT-4o-mini - reliable, fast, and works perfectly with langchain
+# Using AI Pipe - OpenAI-compatible, $5 free credit is more than enough
 llm = ChatOpenAI(
     model="gpt-4o-mini",
-    temperature=0
+    temperature=0,
+    base_url="https://aipipe.org/v1",
+    api_key=os.getenv("AIPIPE_API_KEY")
 ).bind_tools(TOOLS)   
 
 
