@@ -23,19 +23,12 @@ TOOLS = [run_code, get_rendered_html, download_file, post_request, add_dependenc
 
 
 # -------------------------------------------------
-# LLM - GEMINI (With Fallback Strategy)
+# LLM - GEMINI
 # -------------------------------------------------
-MODELS_TO_TRY = ["gemini-1.5-flash", "gemini-1.5-pro", "gemini-pro"]
-
-def get_llm(model_name):
-    return ChatGoogleGenerativeAI(
-        model=model_name,
-        google_api_key=os.getenv("GOOGLE_API_KEY"),
-        temperature=0
-    ).bind_tools(TOOLS)
-
-# Initial LLM (will be dynamic in agent_node)
-llm = get_llm(MODELS_TO_TRY[0])   
+llm = ChatGoogleGenerativeAI(
+    model="gemini-1.5-flash",
+    google_api_key=os.getenv("GOOGLE_API_KEY")
+).bind_tools(TOOLS)   
 
 
 # -------------------------------------------------
@@ -146,24 +139,8 @@ llm_with_prompt = prompt | llm
 # AGENT NODE
 # -------------------------------------------------
 def agent_node(state: AgentState):
-    # Try models in order until one works
-    errors = []
-    
-    for model_name in MODELS_TO_TRY:
-        try:
-            print(f"🔄 Trying model: {model_name}")
-            current_llm = get_llm(model_name)
-            current_chain = prompt | current_llm
-            result = current_chain.invoke({"messages": state["messages"]})
-            print(f"✅ Success with model: {model_name}")
-            return {"messages": state["messages"] + [result]}
-        except Exception as e:
-            print(f"⚠️ Failed with {model_name}: {str(e)}")
-            errors.append(f"{model_name}: {str(e)}")
-            continue
-            
-    # If all failed, raise the last error
-    raise Exception(f"All models failed. Errors: {'; '.join(errors)}")
+    result = llm_with_prompt.invoke({"messages": state["messages"]})
+    return {"messages": state["messages"] + [result]}
 
 
 # -------------------------------------------------
