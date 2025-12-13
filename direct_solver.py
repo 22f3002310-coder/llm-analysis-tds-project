@@ -201,9 +201,15 @@ def main(start_url="https://tds-llm-analysis.s-anand.net/project2"):
             resp = requests.get(current_challenge_url, params=params, timeout=10)
             if resp.status_code != 200:
                 print(f"❌ Failed to get question: {resp.status_code}")
+                print(f"Response: {resp.text}")
                 break
                 
-            data = resp.json()
+            try:
+                data = resp.json()
+            except Exception as e:
+                print(f"❌ Critical Solver Error: {e}")
+                print(f"Raw Response Content: {resp.text[:500]}...") # Print first 500 chars
+                break
             question = data.get("question", "")
             challenge_name = current_challenge_url.split("/")[-1]
             

@@ -155,15 +155,30 @@ def agent_node(state: AgentState):
             # In the state, we don't easily have the original input unless we scan history.
             # We'll try to find a URL in the last user message, else default.
             
-            target_url = "https://tds-llm-analysis.s-anand.net/project2" # Default
+            # Extract the URL from the messages
+            target_url = None
+            
+            # 1. Try to find explicit URL in user input (JSON body typically)
+            import re
             for m in reversed(state["messages"]):
-                if hasattr(m, "content") and "url" in m.content:
-                     # Attempt to extract json or look for http
-                     import re
-                     urls = re.findall(r'https?://[^\s"\']+', str(m.content))
-                     if urls:
-                         target_url = urls[0]
-                         break
+                content = str(m.content)
+                # Look for the strict pattern "url": "..." as sent by the curl command
+                match = re.search(r'"url":\s*"([^"]+)"', content)
+                if match:
+                    target_url = match.group(1)
+                    break
+                
+                # Fallback: look for http in the text
+                urls = re.findall(r'https?://[^\s"\']+', content)
+                if urls:
+                    # Filter out the render url itself if present
+                    candidates = [u for u in urls if "onrender.com" not in u]
+                    if candidates:
+                        target_url = candidates[0]
+                        break
+            
+            if not target_url:
+                target_url = "https://tds-llm-analysis.s-anand.net/project2" # Default
             
             print(f"Targeting URL: {target_url}")
             direct_solver.main(target_url)
