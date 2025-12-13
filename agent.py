@@ -26,7 +26,7 @@ TOOLS = [run_code, get_rendered_html, download_file, post_request, add_dependenc
 # LLM - GEMINI
 # -------------------------------------------------
 llm = ChatGoogleGenerativeAI(
-    model="gemini-1.5-flash",
+    model="gemini-pro",
     google_api_key=os.getenv("GOOGLE_API_KEY")
 ).bind_tools(TOOLS)   
 
