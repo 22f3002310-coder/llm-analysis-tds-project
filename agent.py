@@ -4,7 +4,7 @@ from langgraph.prebuilt import ToolNode
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from tools import get_rendered_html, download_file, post_request, run_code, add_dependencies, transcribe_audio
 from typing import TypedDict, Annotated, List, Any
-from langchain_openai import ChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langgraph.graph.message import add_messages
 import os
 from dotenv import load_dotenv
@@ -23,14 +23,19 @@ TOOLS = [run_code, get_rendered_html, download_file, post_request, add_dependenc
 
 
 # -------------------------------------------------
-# LLM - GEMINI (via OpenAI Compatibility Layer)
+# LLM - GEMINI (With Fallback Strategy)
 # -------------------------------------------------
-# Using Google's OpenAI-compatible endpoint for better stability
-llm = ChatOpenAI(
-    model="gemini-1.5-flash",
-    api_key=os.getenv("GOOGLE_API_KEY"),
-    base_url="https://generativelanguage.googleapis.com/v1beta/openai/"
-).bind_tools(TOOLS)   
+MODELS_TO_TRY = ["gemini-1.5-flash", "gemini-1.5-pro", "gemini-pro"]
+
+def get_llm(model_name):
+    return ChatGoogleGenerativeAI(
+        model=model_name,
+        google_api_key=os.getenv("GOOGLE_API_KEY"),
+        temperature=0
+    ).bind_tools(TOOLS)
+
+# Initial LLM (will be dynamic in agent_node)
+llm = get_llm(MODELS_TO_TRY[0])   
 
 
 # -------------------------------------------------
@@ -141,8 +146,24 @@ llm_with_prompt = prompt | llm
 # AGENT NODE
 # -------------------------------------------------
 def agent_node(state: AgentState):
-    result = llm_with_prompt.invoke({"messages": state["messages"]})
-    return {"messages": state["messages"] + [result]}
+    # Try models in order until one works
+    errors = []
+    
+    for model_name in MODELS_TO_TRY:
+        try:
+            print(f"🔄 Trying model: {model_name}")
+            current_llm = get_llm(model_name)
+            current_chain = prompt | current_llm
+            result = current_chain.invoke({"messages": state["messages"]})
+            print(f"✅ Success with model: {model_name}")
+            return {"messages": state["messages"] + [result]}
+        except Exception as e:
+            print(f"⚠️ Failed with {model_name}: {str(e)}")
+            errors.append(f"{model_name}: {str(e)}")
+            continue
+            
+    # If all failed, raise the last error
+    raise Exception(f"All models failed. Errors: {'; '.join(errors)}")
 
 
 # -------------------------------------------------
