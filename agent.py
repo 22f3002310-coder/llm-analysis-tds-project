@@ -4,7 +4,7 @@ from langgraph.prebuilt import ToolNode
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from tools import get_rendered_html, download_file, post_request, run_code, add_dependencies, transcribe_audio
 from typing import TypedDict, Annotated, List, Any
-from langchain_openai import ChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langgraph.graph.message import add_messages
 import os
 from dotenv import load_dotenv
@@ -23,14 +23,11 @@ TOOLS = [run_code, get_rendered_html, download_file, post_request, add_dependenc
 
 
 # -------------------------------------------------
-# LLM - Using AI Pipe (OpenAI-compatible)
+# LLM - GEMINI
 # -------------------------------------------------
-# Using AI Pipe - OpenAI-compatible, $5 free credit is more than enough
-llm = ChatOpenAI(
-    model="gpt-4o-mini",
-    temperature=0,
-    base_url="https://aipipe.org/v1",
-    api_key=os.getenv("AIPIPE_API_KEY")
+llm = ChatGoogleGenerativeAI(
+    model="gemini-1.5-flash",
+    google_api_key=os.getenv("GOOGLE_API_KEY")
 ).bind_tools(TOOLS)   
 
 
